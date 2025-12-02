@@ -48,7 +48,7 @@ namespace GodotTresEditor
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Не удалось загрузить TRES: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Unable to load content.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
