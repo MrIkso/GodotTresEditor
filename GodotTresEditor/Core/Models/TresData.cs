@@ -3,6 +3,8 @@
     public class TresData
     {
         public string BaseType { get; set; }
+
+        public int Format { get; set; }
         public string ScriptType { get; set; }
         public Dictionary<string, object> Properties { get; } = new();
 

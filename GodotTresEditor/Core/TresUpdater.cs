@@ -9,7 +9,7 @@ namespace GodotTresEditor.Core
         {
             int[] hashTable = data.GetProperty<int[]>("hash_table");
             int[] bucketTable = data.GetProperty<int[]>("bucket_table");
-           // byte[] oldStrings = data.GetProperty<byte[]>("strings");
+            // byte[] oldStrings = data.GetProperty<byte[]>("strings");
 
             var newBucket = new int[bucketTable.Length];
             var newStringsList = new List<byte>();
@@ -52,7 +52,7 @@ namespace GodotTresEditor.Core
                 BucketTable = newBucket,
                 Strings = newStringsList.ToArray()
             };
-          
+
         }
 
         private static (int Offset, int CompSize, int UncompSize, byte[] Data) CompressString(byte[] src, int currentOffset)
@@ -69,7 +69,7 @@ namespace GodotTresEditor.Core
             return (currentOffset, finalBytes.Length, src.Length, finalBytes);
         }
 
-        public static void UpdateTranslationFile(string filePath, GeneratedTranslationData newData)
+        public static void UpdateTranslationFile(string filePath, GeneratedTranslationData newData, int format)
         {
             if (!File.Exists(filePath))
             {
@@ -102,7 +102,7 @@ namespace GodotTresEditor.Core
                     else if (trimmedLine.StartsWith("strings ="))
                     {
                         writer.Write("strings = ");
-                        WriteByteArray(writer, newData.Strings);
+                        WriteByteArray(writer, newData.Strings, format);
                         writer.WriteLine();
                     }
                     else
@@ -116,14 +116,14 @@ namespace GodotTresEditor.Core
             File.Move(tempPath, filePath);
         }
 
-        public static void UpdateFontFile(string filePath, byte[] newFontData)
+        public static void UpdateFontFile(string filePath, byte[] newFontData, int format)
         {
             if (!File.Exists(filePath))
             {
                 throw new FileNotFoundException($"File not found: {filePath}");
             }
             string tempPath = filePath + ".tmp";
-  
+
             using (var reader = new StreamReader(filePath, Encoding.ASCII))
             using (var writer = new StreamWriter(tempPath, false, Encoding.ASCII))
             {
@@ -134,7 +134,7 @@ namespace GodotTresEditor.Core
                     if (trimmedLine.StartsWith("data ="))
                     {
                         writer.Write("data = ");
-                        WriteByteArray(writer, newFontData);
+                        WriteByteArray(writer, newFontData, format);
                         writer.WriteLine();
                     }
                     else
@@ -161,16 +161,29 @@ namespace GodotTresEditor.Core
             writer.Write(")");
         }
 
-        private static void WriteByteArray(StreamWriter writer, byte[] data)
+        private static void WriteByteArray(StreamWriter writer, byte[] data, int format)
         {
             writer.Write("PackedByteArray(");
-            for (int i = 0; i < data.Length; i++)
+
+            if (format == 3)
             {
-                writer.Write(data[i]);
-                if (i < data.Length - 1)
+                for (int i = 0; i < data.Length; i++)
                 {
-                    writer.Write(", ");
+                    writer.Write(data[i]);
+                    if (i < data.Length - 1)
+                    {
+                        writer.Write(", ");
+                    }
                 }
+            }
+            else if (format == 4)
+            {
+                string base64 = Convert.ToBase64String(data);
+                writer.Write($"\"{base64}\"");
+            }
+            else
+            {
+                throw new ArgumentException("Invalid format specified for byte array writing.");
             }
             writer.Write(")");
         }

@@ -81,6 +81,14 @@ namespace GodotTresEditor
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
+                if (tresData.BaseType == "OptimizedTranslation")
+                {
+                    openedContentType = OpenedContentType.OptimizedTranslation;
+                }
+                if (tresData.BaseType == "FontFile")
+                {
+                    openedContentType = OpenedContentType.FontFile;
+                }
                 string data = File.ReadAllText(loadedTresPath);
                 richTextBox.Text = data;
             }
@@ -96,29 +104,28 @@ namespace GodotTresEditor
 
         private void extractDataToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (tresData.BaseType == "OptimizedTranslation")
+            var outputFilePath = string.Empty;
+            switch (openedContentType)
             {
-                openedContentType = OpenedContentType.OptimizedTranslation;
-                var translationKeys = OptimizedTranslationParser.GetTranslatedMessages(tresData);
-                var outputFilePath = Path.ChangeExtension(loadedTresPath, ".csv");
-                WriteCSV(outputFilePath, translationKeys);
-                MessageBox.Show("Translation data extracted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+                case OpenedContentType.OptimizedTranslation:
+                    var translationKeys = OptimizedTranslationParser.GetTranslatedMessages(tresData);
+                    outputFilePath = Path.ChangeExtension(loadedTresPath, ".csv");
+                    WriteCSV(outputFilePath, translationKeys);
+                    MessageBox.Show("Translation data extracted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
 
-            if (tresData.BaseType == "FontFile")
-            {
-                openedContentType = OpenedContentType.FontFile;
-                byte[] font = tresData.GetProperty<byte[]>("data");
-                var outputFilePath = Path.ChangeExtension(loadedTresPath, ".ttf");
-                File.WriteAllBytes(outputFilePath, font);
-                MessageBox.Show("Font file extracted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-            else
-            {
-                MessageBox.Show($"Unable extract data. Unsupported TRES type: {tresData.BaseType}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                case OpenedContentType.FontFile:
+                    openedContentType = OpenedContentType.FontFile;
+                    byte[] font = tresData.GetProperty<byte[]>("data");
+                    outputFilePath = Path.ChangeExtension(loadedTresPath, ".ttf");
+                    File.WriteAllBytes(outputFilePath, font);
+                    MessageBox.Show("Font file extracted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+
+                default:
+                    MessageBox.Show($"Unable extract data. Unsupported TRES type: {tresData.BaseType}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+
             }
         }
 
@@ -169,7 +176,7 @@ namespace GodotTresEditor
             {
                 var fontFilePath = openFileDialog.FileName;
                 var fontData = File.ReadAllBytes(fontFilePath);
-                TresUpdater.UpdateFontFile(loadedTresPath, fontData);
+                TresUpdater.UpdateFontFile(loadedTresPath, fontData, tresData.Format);
                 MessageBox.Show("Font file updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -195,7 +202,7 @@ namespace GodotTresEditor
                 }
 
                 var updatedData = TresUpdater.GenEditedStrings(tresData, editedStrings);
-                TresUpdater.UpdateTranslationFile(loadedTresPath, updatedData);
+                TresUpdater.UpdateTranslationFile(loadedTresPath, updatedData, tresData.Format);
                 MessageBox.Show("Translation file updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }

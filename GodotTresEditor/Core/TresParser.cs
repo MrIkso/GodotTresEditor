@@ -7,7 +7,7 @@ namespace GodotTresEditor.Core;
 internal static class TresParser
 {
     private const string ResourceToken = "[resource]";
-    private const string BaseTypeRegexStr = @"^\[gd_resource type=""(?<BaseType>.+?)""";
+    private const string BaseTypeRegexStr = @"^\[gd_resource type=""(?<BaseType>.+?)"".+?format=(?<Format>.+?)";
     private const string ScriptPathRegexStr = @"^\[ext_resource type=""Script"".+?path=""(?<Path>.+?)"".+?id=""(?<Id>.+?)""";
     private const string ScriptUsageRegexStr = @"^script = ExtResource\(""(?<Id>.+?)""\)";
 
@@ -32,6 +32,7 @@ internal static class TresParser
                 if (match.Success)
                 {
                     result.BaseType = match.Groups["BaseType"].Value;
+                    result.Format = int.Parse(match.Groups["Format"].Value);
                     continue;
                 }
             }
@@ -126,6 +127,7 @@ internal static class TresParser
             return Array.Empty<int>();
 
         var content = raw.Substring(start, end - start);
+
         if (string.IsNullOrWhiteSpace(content))
             return Array.Empty<int>();
 
@@ -146,8 +148,20 @@ internal static class TresParser
         if (string.IsNullOrWhiteSpace(content))
             return Array.Empty<byte>();
 
-        return content.Split(',')
-                      .Select(s => byte.Parse(s.Trim(), CultureInfo.InvariantCulture))
-                      .ToArray();
+        if (content.StartsWith("\"") && content.EndsWith("\""))
+        {
+            content = content.Trim('"');
+        }
+
+        if (content.EndsWith("=="))
+        {
+            return Convert.FromBase64String(content);
+        }
+        else
+        {
+            return content.Split(',')
+                          .Select(s => byte.Parse(s.Trim(), CultureInfo.InvariantCulture))
+                          .ToArray();
+        }
     }
 }
