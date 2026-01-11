@@ -79,7 +79,7 @@ internal static class TresParser
                     string key = line.Substring(0, equalIndex).Trim();
                     string rawValue = line.Substring(equalIndex + 1).Trim();
 
-                    object parsedValue = ParseValue(rawValue);
+                    object parsedValue = ParseValue(rawValue, result.Format);
                     result.Properties[key] = parsedValue;
                 }
             }
@@ -88,7 +88,7 @@ internal static class TresParser
         return result;
     }
 
-    private static object ParseValue(string value)
+    private static object ParseValue(string value, int verion)
     {
         if (value.StartsWith("\"") && value.EndsWith("\""))
         {
@@ -102,7 +102,7 @@ internal static class TresParser
 
         if (value.StartsWith("PackedByteArray("))
         {
-            return ParseByteArray(value);
+            return ParseByteArray(value, verion);
         }
 
         if (int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out int intVal))
@@ -136,7 +136,7 @@ internal static class TresParser
                       .ToArray();
     }
 
-    private static byte[] ParseByteArray(string raw)
+    private static byte[] ParseByteArray(string raw, int version)
     {
         int start = raw.IndexOf('(') + 1;
         int end = raw.LastIndexOf(')');
@@ -153,7 +153,7 @@ internal static class TresParser
             content = content.Trim('"');
         }
 
-        if (content.EndsWith("=="))
+        if (version == 4)
         {
             return Convert.FromBase64String(content);
         }

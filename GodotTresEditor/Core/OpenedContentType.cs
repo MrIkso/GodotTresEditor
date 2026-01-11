@@ -4,6 +4,7 @@
     {
         FontFile,
         OptimizedTranslation,
+        Texture,
         Unknown
     }
 }

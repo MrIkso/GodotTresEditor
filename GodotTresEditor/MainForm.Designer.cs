@@ -58,7 +58,7 @@
             // openToolStripMenuItem
             // 
             openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(224, 26);
+            openToolStripMenuItem.Size = new Size(197, 26);
             openToolStripMenuItem.Text = "Open";
             openToolStripMenuItem.Click += openToolStripMenuItem_Click;
             // 
@@ -66,7 +66,7 @@
             // 
             extractDataToolStripMenuItem.Enabled = false;
             extractDataToolStripMenuItem.Name = "extractDataToolStripMenuItem";
-            extractDataToolStripMenuItem.Size = new Size(224, 26);
+            extractDataToolStripMenuItem.Size = new Size(197, 26);
             extractDataToolStripMenuItem.Text = "Extract Data";
             extractDataToolStripMenuItem.Click += extractDataToolStripMenuItem_Click;
             // 
@@ -74,20 +74,21 @@
             // 
             updateContentToolStripMenuItem.Enabled = false;
             updateContentToolStripMenuItem.Name = "updateContentToolStripMenuItem";
-            updateContentToolStripMenuItem.Size = new Size(224, 26);
+            updateContentToolStripMenuItem.Size = new Size(197, 26);
             updateContentToolStripMenuItem.Text = "Update Content";
-            updateContentToolStripMenuItem.Click += updateTextContentToolStripMenuItem_Click;
+            updateContentToolStripMenuItem.Click += updateContentToolStripMenuItem_Click;
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(224, 26);
+            exitToolStripMenuItem.Size = new Size(197, 26);
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
             // richTextBox
             // 
             richTextBox.Dock = DockStyle.Fill;
+            richTextBox.EnableAutoDragDrop = true;
             richTextBox.Location = new Point(0, 28);
             richTextBox.Name = "richTextBox";
             richTextBox.ReadOnly = true;
@@ -98,6 +99,7 @@
             // 
             // MainForm
             // 
+            AllowDrop = true;
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
@@ -105,7 +107,10 @@
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
             Name = "MainForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Form1";
+            DragDrop += MainForm_DragDrop;
+            DragEnter += MainForm_DragEnter;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);
