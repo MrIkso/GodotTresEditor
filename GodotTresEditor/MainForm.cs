@@ -399,11 +399,11 @@ namespace GodotTresEditor
         {
             if (!string.IsNullOrWhiteSpace(loadedResourcePath))
             {
-                this.Text = $"Godot TRES Editor - {Path.GetFileName(loadedResourcePath)}";
+                this.Text = $"Godot TRES Editor - {Path.GetFileName(loadedResourcePath)} - {GetApplicationVersion()}";
             }
             else
             {
-                this.Text = "Godot TRES Editor";
+                this.Text = $"Godot TRES Editor - {GetApplicationVersion()}";
             }
         }
 
@@ -444,6 +444,12 @@ namespace GodotTresEditor
             {
                 e.Effect = DragDropEffects.None;
             }
+        }
+
+        public static string GetApplicationVersion()
+        {
+            var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            return $"{version.Major}.{version.Minor}.{version.Build}";
         }
     }
 }
