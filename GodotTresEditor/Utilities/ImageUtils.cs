@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace GodotTresEditor.Utilities
 {
@@ -21,7 +17,7 @@ namespace GodotTresEditor.Utilities
 
             string type = Encoding.ASCII.GetString(data, 12, 4);
 
-            if (type == "VP8X") // Extended Format (Ваш випадок)
+            if (type == "VP8X") // Extended Format
             {
                 int w = (data[24] | (data[25] << 8) | (data[26] << 16)) + 1;
                 int h = (data[27] | (data[28] << 8) | (data[29] << 16)) + 1;
