@@ -6,4 +6,4 @@ Supported types:
 - [x] FontFile (.fontdata files)
 - [x] Textures (.ctex or .stex files)
 
-Tool works if you convert binary files to text using [dsdecomp](https://github.com/GDRETools/gdsdecomp)
+Tool works if you convert binary files to text using [dsdecomp](https://github.com/GDRETools/gdsdecomp). Thanks [Godot](https://github.com/godotengine/godot) for the source code. Without it, I wouldn't have been able to figure out how resources are written and read.
