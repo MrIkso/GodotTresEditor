@@ -1,10 +1,10 @@
-﻿namespace GodotTresEditor.Core
+﻿namespace GodotTresEditor.Core;
+
+enum OpenedContentType
 {
-    enum OpenedContentType
-    {
-        FontFile,
-        OptimizedTranslation,
-        Texture,
-        Unknown
-    }
+    FontFile,
+    OptimizedTranslation,
+    Texture,
+    InkResource,
+    Unknown
 }

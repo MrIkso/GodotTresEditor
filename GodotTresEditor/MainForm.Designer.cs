@@ -34,7 +34,7 @@
             extractDataToolStripMenuItem = new ToolStripMenuItem();
             updateContentToolStripMenuItem = new ToolStripMenuItem();
             exitToolStripMenuItem = new ToolStripMenuItem();
-            richTextBox = new RichTextBox();
+            textBox = new TextBox();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -85,17 +85,18 @@
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
-            // richTextBox
+            // textBox
             // 
-            richTextBox.Dock = DockStyle.Fill;
-            richTextBox.EnableAutoDragDrop = true;
-            richTextBox.Location = new Point(0, 28);
-            richTextBox.Name = "richTextBox";
-            richTextBox.ReadOnly = true;
-            richTextBox.Size = new Size(800, 422);
-            richTextBox.TabIndex = 1;
-            richTextBox.Text = "";
-            richTextBox.WordWrap = false;
+            textBox.Dock = DockStyle.Fill;
+            textBox.Location = new Point(0, 28);
+            textBox.Multiline = true;
+            textBox.Name = "textBox";
+            textBox.ReadOnly = true;
+            textBox.ScrollBars = ScrollBars.Both;
+            textBox.Size = new Size(800, 422);
+            textBox.TabIndex = 1;
+            textBox.WordWrap = false;
+            textBox.Enter += TextBox_Enter;
             // 
             // MainForm
             // 
@@ -103,7 +104,7 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(richTextBox);
+            Controls.Add(textBox);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
             Name = "MainForm";
@@ -124,7 +125,7 @@
         private ToolStripMenuItem openToolStripMenuItem;
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripMenuItem updateContentToolStripMenuItem;
-        private RichTextBox richTextBox;
+        private TextBox textBox;
         private ToolStripMenuItem extractDataToolStripMenuItem;
     }
 }

@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 
 namespace GodotTresEditor.Utilities.Extensions;
+
 internal static class RegexExtensions
 {
     public static Dictionary<string, string> ToDictionary(this Group keys, Group values) => keys.Captures.ToDictionary(values.Captures);
